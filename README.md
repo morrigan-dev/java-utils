@@ -15,10 +15,24 @@
 
 <hr />
 <p align="center">
-    <a href="#über-dieses-projekt">Über dieses Projekt</a>
+    <a href="#über-dieses-projekt">Über dieses Projekt</a> •
+    <a href="#lizenzierung">Lizenzierung</a>
 </p>
 <hr />
 
 ## Über dieses Projekt
 
 In diesem Projekt sind diverse Util Klassen zu einer Sammlung vereint, zu denen es keine offizielle Bibliothek gibt. Die Sammlung besitzt keine durchdachte Ordnung, sondern wächst nach Bedarf. So habe ich viele kleine Projekte, die immer wieder auf kleinere Utils zurückgreifen, die dann in einem eigenen Package oder einem eigenen Maven Modul aufgelagert werden. Damit diese Utils zentral an einer Stelle gesammelt, gepflegt und weiterentwickelt werden können, ist dieses Projekt entstanden.
+
+## Lizenzierung
+
+Copyright (c) 2020 Thomas Gattinger.
+
+Lizenziert unter **Apache-Lizenz, Version 2.0** (die "Lizenz"). Sie dürfen diese Datei ausschließlich im Einklang mit 
+der Lizenz verwenden.
+
+Eine Kopie der Lizenz erhalten Sie unter https://www.apache.org/licenses/LICENSE-2.0.
+
+Sofern nicht durch anwendbares Recht gefordert oder schriftlich vereinbart, wird jede unter der Lizenz bereitgestellte 
+Software „OHNE MÄNGELGEWÄHR“ UND OHNE AUSDRÜCKLICHE ODER STILLSCHWEIGENDE GARANTIE JEGLICHER ART bereitgestellt. 
+Die genauen Angaben zu Genehmigungen und Einschränkungen unter der Lizenz finden Sie in der [LIZENZ](LICENSE).
