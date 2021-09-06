@@ -1,9 +1,11 @@
-package de.morrigan.dev.utils;
+package de.morrigan.dev.test.utils;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
 import org.junit.Test;
+
+import de.morrigan.dev.utils.BitUtil;
 
 public class BitUtilTest {
 
