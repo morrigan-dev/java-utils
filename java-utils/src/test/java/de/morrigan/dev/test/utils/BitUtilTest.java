@@ -74,4 +74,11 @@ public class BitUtilTest {
       BitUtil.setLongBit(64);
     });
   }
+
+  @Test
+  public void test_if_setAllBits_set_all_bits_to_one() {
+    long expected = -1L;
+    long actual = BitUtil.setAllBits();
+    assertEquals(expected, actual);
+  }
 }
