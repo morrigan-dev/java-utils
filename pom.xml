@@ -19,6 +19,7 @@
 	<modules>
 		<module>java-utils</module>
 		<module>java-utils-logging</module>
+		<module>java-utils-resources</module>
 		<module>java-utils-swing</module>
 	</modules>
 

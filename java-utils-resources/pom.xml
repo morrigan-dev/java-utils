@@ -8,11 +8,11 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>java-utils</artifactId>
+	<artifactId>java-utils-resources</artifactId>
 	<packaging>jar</packaging>
 
-	<name>Java Utils</name>
-	<description>Sammlung von verschiedenen Utils</description>
+	<name>Java Utils - Resources Modul</name>
+	<description>Sammlung von verschiedenen Java Utils um auf Resourcen zuzugreifen</description>
 
 	<properties>
 	</properties>
@@ -21,4 +21,15 @@
 		<dependencies>
 		</dependencies>
 	</dependencyManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.reflections</groupId>
+			<artifactId>reflections</artifactId>
+		</dependency>
+	</dependencies>
 </project>
