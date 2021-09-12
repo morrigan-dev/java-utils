@@ -36,6 +36,18 @@
 		<sonar.projectKey>morrigan-dev_java-utils</sonar.projectKey>
 		<!-- Lösung für ein StackOverflowError Problem (siehe: https://community.sonarsource.com/t/stackoverflowerror-at-defaultinputcomponent-equals/20324) -->
 		<sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
+
+		<image-comparison.version>4.4.0</image-comparison.version>
 	</properties>
-	
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- Enthält verschiedene Hilfsklassen zur Bildverarbeitung -->
+			<dependency>
+				<groupId>com.github.romankh3</groupId>
+				<artifactId>image-comparison</artifactId>
+				<version>${image-comparison.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>

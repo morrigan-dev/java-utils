@@ -9,18 +9,26 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Optional;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.github.romankh3.image.comparison.ImageComparison;
+import com.github.romankh3.image.comparison.model.ImageComparisonResult;
+import com.github.romankh3.image.comparison.model.ImageComparisonState;
 
 import de.morrigan.dev.utils.resources.ImageManager;
 
@@ -52,11 +60,11 @@ public class ImageManagerTest {
     Color colorRed = new Color(((BufferedImage) redImage.get()).getRGB(10, 10));
     assertThat(colorRed.getRed(), is(equalTo(255)));
 
-    assertThat(this.sut.getImageNames(), hasSize(14));
+    assertThat(this.sut.getImageNames(), hasSize(15));
     assertThat(this.sut.getImageNames(),
         containsInAnyOrder("20x20_green-bmp", "20x20_green-gif", "20x20_green-ico", "20x20_green-jpeg",
             "20x20_green-jpg", "20x20_green-png", "20x20_green-tif", "20x20_green-tiff", "20x20_red-bmp",
-            "20x20_red-gif", "20x20_red-ico", "20x20_red-jpg", "20x20_red-png", "20x20_red-tif"));
+            "20x20_red-gif", "20x20_red-ico", "20x20_red-jpg", "20x20_red-png", "20x20_red-tif", "97461-png"));
   }
 
   @Test
@@ -73,11 +81,11 @@ public class ImageManagerTest {
     Color colorRed = new Color(((BufferedImage) redImage.get()).getRGB(10, 10));
     assertThat(colorRed.getRed(), is(equalTo(255)));
 
-    assertThat(this.sut.getImageNames(), hasSize(14));
+    assertThat(this.sut.getImageNames(), hasSize(15));
     assertThat(this.sut.getImageNames(),
         containsInAnyOrder("20x20_green-bmp", "20x20_green-gif", "20x20_green-ico", "20x20_green-jpeg",
             "20x20_green-jpg", "20x20_green-png", "20x20_green-tif", "20x20_green-tiff", "20x20_red-bmp",
-            "20x20_red-gif", "20x20_red-ico", "20x20_red-jpg", "20x20_red-png", "20x20_red-tif"));
+            "20x20_red-gif", "20x20_red-ico", "20x20_red-jpg", "20x20_red-png", "20x20_red-tif", "97461-png"));
   }
 
   @Test
@@ -136,8 +144,8 @@ public class ImageManagerTest {
   @Test
   public void testLoadAllImagesFromResourcesWithPngExtension() {
     this.sut.loadAllImagesFromResources("images", ".png");
-    assertThat(this.sut.getImageNames(), hasSize(2));
-    assertThat(this.sut.getImageNames(), containsInAnyOrder("20x20_red-png", "20x20_green-png"));
+    assertThat(this.sut.getImageNames(), hasSize(3));
+    assertThat(this.sut.getImageNames(), containsInAnyOrder("20x20_red-png", "20x20_green-png", "97461-png"));
   }
 
   @Test
@@ -145,6 +153,27 @@ public class ImageManagerTest {
     this.sut.loadAllImagesFromResources("images", ".tif");
     assertThat(this.sut.getImageNames(), hasSize(2));
     assertThat(this.sut.getImageNames(), containsInAnyOrder("20x20_red-tif", "20x20_green-tif"));
+  }
+
+  @Test
+  public void testLoadImageFromUrl() throws IOException {
+    URL url = new URL("https://render.guildwars2.com/file/25B230711176AB5728E86F5FC5F0BFAE48B32F6E/97461.png");
+    this.sut.loadImageFromUrl("97461-png", url);
+    Optional<Image> image = this.sut.getImage("97461-png");
+    assertThat(image, is(not(emptyOptional())));
+    BufferedImage actualImage = (BufferedImage) image.get();
+    BufferedImage expectedImage = ImageIO.read(getClass().getResourceAsStream("/images/97461.png"));
+    ImageComparisonResult result = new ImageComparison(expectedImage, actualImage).compareImages();
+    assertEquals(ImageComparisonState.MATCH, result.getImageComparisonState());
+  }
+
+  @Test
+  public void testLoadImageFromMissingUrl() throws IOException {
+    URL url = new URL("https://render.guildwars2.com/file/25B230711176AB5728E86F5FC5F0BFAE48B32F6E/9746.png");
+    this.sut.loadImageFromUrl("9746-png", url);
+    Optional<Image> image = this.sut.getImage("9746-png");
+    assertThat(image, is(emptyOptional()));
+    assertThat(this.sut.getImageNames(), hasSize(0));
   }
 
   @Test

@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -175,6 +176,20 @@ public class ImageManager {
     }
 
     LOG.info("{} Bilder erfolgreich geladen...", counter);
+  }
+
+  /**
+   * Lädt ein Bild über die angegebene URL und legt dieses unter dem angegebenen Namen im Cache ab.
+   *
+   * @param imageName Name eines Bildes
+   * @param url URL zum Bild
+   */
+  public void loadImageFromUrl(String imageName, URL url) {
+    try {
+      this.imageCache.put(imageName, ImageIO.read(url));
+    } catch (IOException e) {
+      LOG.error(e.getMessage(), e);
+    }
   }
 
   /**
