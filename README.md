@@ -22,7 +22,7 @@
 
 ## Über dieses Projekt
 
-In diesem Projekt sind diverse Util Klassen zu einer Sammlung vereint, zu denen es keine offizielle Bibliothek gibt. Die Sammlung besitzt keine durchdachte Ordnung, sondern wächst nach Bedarf. So habe ich viele kleine Projekte, die immer wieder auf kleinere Utils zurückgreifen, die dann in einem eigenen Package oder einem eigenen Maven Modul aufgelagert werden. Damit diese Utils zentral an einer Stelle gesammelt, gepflegt und weiterentwickelt werden können, ist dieses Projekt entstanden.
+In diesem Projekt sind diverse Util Klassen zu einer Sammlung vereint, zu denen es keine offizielle Bibliothek gibt. Die Sammlung besitzt keine durchdachte Ordnung, sondern wächst nach Bedarf. So habe ich viele kleine Projekte, die immer wieder auf kleinere Utils zurückgreifen, die dann in einem eigenen Package oder einem eigenen Maven Modul ausgelagert werden. Damit diese Utils zentral an einer Stelle gesammelt, gepflegt und weiterentwickelt werden können, ist dieses Projekt entstanden.
 
 ## Lizenzierung
 
