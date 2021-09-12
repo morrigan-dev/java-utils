@@ -51,7 +51,8 @@ public class ImageManager {
 
   /** Unterstützte Dateiendungen */
   private static final String[] SUPPORTED_FILE_EXTENSIONS = new String[] {
-      ".bmp", ".gif", ".ico", ".jpg", ".jpeg", ".png", ".tif", "tiff"
+      ".bmp", ".gif", ".ico", ".jpg", ".jpeg", ".png", ".tif", ".tiff",
+      ".BMP", ".GIF", ".ICO", ".JPG", ".JPEG", ".PNG", ".TIF", ".TIFF"
   };
 
   /** Beinhaltet alle geladenen Bilder und können über einen entsprechenden Schlüssel abgerufen werden */

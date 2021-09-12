@@ -83,6 +83,14 @@ public class FontManagerTest {
   }
 
   @Test
+  public void testLoadAllFontsFromResourceInUpperDir() {
+    this.sut.loadAllFontsFromResources("font/upper");
+
+    assertThat(this.sut.getFontNames(), hasSize(2));
+    assertThat(this.sut.getFontNames(), containsInAnyOrder("menomonia", "menomonia-italic"));
+  }
+
+  @Test
   public void testLoadAllFontsFromResourcesWithDirectoryTypeAndFileEstension() {
     this.sut.loadAllFontsFromResources("font/special", Font.TRUETYPE_FONT, ".ttf");
 

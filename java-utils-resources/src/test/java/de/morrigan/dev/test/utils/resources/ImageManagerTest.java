@@ -52,11 +52,11 @@ public class ImageManagerTest {
     Color colorRed = new Color(((BufferedImage) redImage.get()).getRGB(10, 10));
     assertThat(colorRed.getRed(), is(equalTo(255)));
 
-    assertThat(this.sut.getImageNames(), hasSize(12));
+    assertThat(this.sut.getImageNames(), hasSize(14));
     assertThat(this.sut.getImageNames(),
-        containsInAnyOrder("20x20_green-bmp", "20x20_green-gif", "20x20_green-ico", "20x20_green-jpg",
-            "20x20_green-png", "20x20_green-tif", "20x20_red-bmp", "20x20_red-gif", "20x20_red-ico", "20x20_red-jpg",
-            "20x20_red-png", "20x20_red-tif"));
+        containsInAnyOrder("20x20_green-bmp", "20x20_green-gif", "20x20_green-ico", "20x20_green-jpeg",
+            "20x20_green-jpg", "20x20_green-png", "20x20_green-tif", "20x20_green-tiff", "20x20_red-bmp",
+            "20x20_red-gif", "20x20_red-ico", "20x20_red-jpg", "20x20_red-png", "20x20_red-tif"));
   }
 
   @Test
@@ -73,11 +73,11 @@ public class ImageManagerTest {
     Color colorRed = new Color(((BufferedImage) redImage.get()).getRGB(10, 10));
     assertThat(colorRed.getRed(), is(equalTo(255)));
 
-    assertThat(this.sut.getImageNames(), hasSize(12));
+    assertThat(this.sut.getImageNames(), hasSize(14));
     assertThat(this.sut.getImageNames(),
-        containsInAnyOrder("20x20_green-bmp", "20x20_green-gif", "20x20_green-ico", "20x20_green-jpg",
-            "20x20_green-png", "20x20_green-tif", "20x20_red-bmp", "20x20_red-gif", "20x20_red-ico", "20x20_red-jpg",
-            "20x20_red-png", "20x20_red-tif"));
+        containsInAnyOrder("20x20_green-bmp", "20x20_green-gif", "20x20_green-ico", "20x20_green-jpeg",
+            "20x20_green-jpg", "20x20_green-png", "20x20_green-tif", "20x20_green-tiff", "20x20_red-bmp",
+            "20x20_red-gif", "20x20_red-ico", "20x20_red-jpg", "20x20_red-png", "20x20_red-tif"));
   }
 
   @Test
@@ -93,6 +93,16 @@ public class ImageManagerTest {
     assertThat(this.sut.getImageNames(),
         containsInAnyOrder("20x20_red-bmp", "20x20_red-gif", "20x20_red-ico", "20x20_red-jpg", "20x20_red-png",
             "20x20_red-tif"));
+  }
+
+  @Test
+  public void testLoadAllImagesFromResourceInUpperDir() {
+    this.sut.loadAllImagesFromResources("images/upper");
+
+    assertThat(this.sut.getImageNames(), hasSize(6));
+    assertThat(this.sut.getImageNames(),
+        containsInAnyOrder("20x20_green-bmp", "20x20_green-gif", "20x20_green-ico", "20x20_green-jpg",
+            "20x20_green-png", "20x20_green-tif"));
   }
 
   @Test

@@ -5,6 +5,7 @@ import java.awt.FontFormatException;
 import java.awt.geom.AffineTransform;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -153,7 +154,7 @@ public class FontManager {
    * @param directory Pfad zu einem Unterverzeichnis beginnend bei resource in dem die Schrifarten liegen
    */
   public void loadAllFontsFromResources(String directory) {
-    loadAllFontsFromResources(directory, Font.TRUETYPE_FONT, ".ttf");
+    loadAllFontsFromResources(directory, Font.TRUETYPE_FONT, ".ttf", ".TTF");
   }
 
   /**
@@ -161,11 +162,14 @@ public class FontManager {
    *
    * @param directory Pfad zu einem Unterverzeichnis beginnend bei resource in dem die Schrifarten liegen
    * @param fontType Schrittyp (z.b. {@link Font#TRUETYPE_FONT})
-   * @param fileExtension Dateiendung der Schriftarten (z.B. .ttf)
+   * @param fileExtensions Dateiendung der Schriftarten (z.B. .ttf)
    */
-  public void loadAllFontsFromResources(String directory, int fontType, String fileExtension) {
+  public void loadAllFontsFromResources(String directory, int fontType, String... fileExtensions) {
     Reflections reflections = new Reflections(directory, new ResourcesScanner());
-    Set<String> availableFonts = reflections.getResources(Pattern.compile(".*\\" + fileExtension));
+    Set<String> availableFonts = new HashSet<>();
+    for (String fileExtension : fileExtensions) {
+      availableFonts.addAll(reflections.getResources(Pattern.compile(".*\\" + fileExtension)));
+    }
 
     int counter = 0;
     for (String fontPath : availableFonts) {
