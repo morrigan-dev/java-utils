@@ -141,9 +141,6 @@ public class FontManager {
   /**
    * Lädt alle Schriftarten aus den resource Verzeichnissen, die auf dem Classpath liegen. Die Schriftarten müssen dabei
    * die Dateiendung .ttf besitzen und es muss sich um {@link Font#TRUETYPE_FONT} Schriftarten handeln.
-   * 
-   * @throws FontFormatException falls die Dateien mit den Schriftarten beschädigt ist
-   * @throws IOException falls es beim Lesen der Dateien mit den Schriftarten zu Fehlern kommt
    */
   public void loadAllFontsFromResources() {
     loadAllFontsFromResources("");
@@ -153,19 +150,28 @@ public class FontManager {
    * Lädt alle Schriftarten aus den resource Verzeichnissen, die auf dem Classpath liegen. Die Schriftarten müssen dabei
    * die Dateiendung .ttf besitzen und es muss sich um {@link Font#TRUETYPE_FONT} Schriftarten handeln.
    * 
-   * @param directory Ein Pfad zu einem Unterverzeichnis beginnend bei resource in dem die Schrifarten liegen
-   * @throws FontFormatException falls die Dateien mit den Schriftarten beschädigt ist
-   * @throws IOException falls es beim Lesen der Dateien mit den Schriftarten zu Fehlern kommt
+   * @param directory Pfad zu einem Unterverzeichnis beginnend bei resource in dem die Schrifarten liegen
    */
   public void loadAllFontsFromResources(String directory) {
+    loadAllFontsFromResources(directory, Font.TRUETYPE_FONT, ".ttf");
+  }
+
+  /**
+   * Lädt alle Schriftarten aus den resource Verzeichnissen, die auf dem Classpath liegen.
+   * 
+   * @param directory Pfad zu einem Unterverzeichnis beginnend bei resource in dem die Schrifarten liegen
+   * @param fontType Schrittyp (z.b. {@link Font#TRUETYPE_FONT})
+   * @param fileExtension Dateiendung der Schriftarten (z.B. .ttf)
+   */
+  public void loadAllFontsFromResources(String directory, int fontType, String fileExtension) {
     Reflections reflections = new Reflections(directory, new ResourcesScanner());
-    Set<String> availableFonts = reflections.getResources(Pattern.compile(".*\\.ttf"));
+    Set<String> availableFonts = reflections.getResources(Pattern.compile(".*\\" + fileExtension));
 
     int counter = 0;
     for (String font : availableFonts) {
       String baseName = FilenameUtils.getBaseName(font);
       try {
-        addFont(baseName, Font.TRUETYPE_FONT, font);
+        addFont(baseName, fontType, font);
         counter++;
       } catch (FontFormatException | IOException e) {
         LOG.error(e.getMessage(), e);

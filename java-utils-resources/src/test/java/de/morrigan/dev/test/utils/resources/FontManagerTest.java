@@ -74,6 +74,21 @@ public class FontManagerTest {
   }
 
   @Test
+  public void testLoadAllFontsFromResourcesWithDirectoryTypeAndFileEstension() {
+    sut.clear();
+    sut.loadAllFontsFromResources("font/special", Font.TRUETYPE_FONT, ".ttf");
+
+    Optional<Font> menomonia = sut.getFont("menomonia");
+    assertThat(menomonia, is(optionalWithValue()));
+
+    Optional<Font> menomoniaItalic = sut.getFont("menomonia-italic");
+    assertThat(menomoniaItalic, is(optionalWithValue()));
+
+    assertThat(sut.getFontKeys(), hasSize(2));
+    assertThat(sut.getFontKeys(), containsInAnyOrder("menomonia", "menomonia-italic"));
+  }
+
+  @Test
   public void testGetFontWithMissingFont() {
     Optional<Font> font = sut.getFont("missingfont");
     assertThat(font, is(emptyOptional()));
