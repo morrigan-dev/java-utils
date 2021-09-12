@@ -14,116 +14,124 @@ import java.awt.Font;
 import java.awt.geom.AffineTransform;
 import java.util.Optional;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import de.morrigan.dev.utils.resources.FontManager;
 
 public class FontManagerTest {
 
-  public FontManager sut = FontManager.getInstance();
+  private FontManager sut = FontManager.getInstance();
+
+  @Before
+  public void setup() {
+    this.sut.clear();
+  }
+
+  @After
+  public void tearDown() {
+    this.sut.clear();
+  }
 
   @Test
   public void testLoadAllFontsFromResources() {
-    sut.clear();
-    sut.loadAllFontsFromResources();
+    this.sut.loadAllFontsFromResources();
 
-    Optional<Font> cronosRegular = sut.getFont("cronos-pro-regular");
+    Optional<Font> cronosRegular = this.sut.getFont("cronos-pro-regular");
     assertThat(cronosRegular, is(optionalWithValue()));
     assertThat(cronosRegular.get().getFontName(), is(equalTo("CronosPro-Regular")));
 
-    Optional<Font> cronosItalic = sut.getFont("cronos-pro-italic");
+    Optional<Font> cronosItalic = this.sut.getFont("cronos-pro-italic");
     assertThat(cronosItalic, is(optionalWithValue()));
     assertThat(cronosItalic.get().getFontName(), is(equalTo("CronosPro-Italic")));
 
-    assertThat(sut.getFontKeys(), hasSize(4));
-    assertThat(sut.getFontKeys(),
+    assertThat(this.sut.getFontKeys(), hasSize(4));
+    assertThat(this.sut.getFontKeys(),
         containsInAnyOrder("cronos-pro-regular", "cronos-pro-italic", "menomonia", "menomonia-italic"));
   }
 
   @Test
   public void testLoadAllFontsFromResourcesInFontDir() {
-    sut.clear();
-    sut.loadAllFontsFromResources("font");
+    this.sut.loadAllFontsFromResources("font");
 
-    Optional<Font> cronosRegular = sut.getFont("cronos-pro-regular");
+    Optional<Font> cronosRegular = this.sut.getFont("cronos-pro-regular");
     assertThat(cronosRegular, is(optionalWithValue()));
     assertThat(cronosRegular.get().getFontName(), is(equalTo("CronosPro-Regular")));
 
-    Optional<Font> cronosItalic = sut.getFont("cronos-pro-italic");
+    Optional<Font> cronosItalic = this.sut.getFont("cronos-pro-italic");
     assertThat(cronosItalic, is(optionalWithValue()));
     assertThat(cronosItalic.get().getFontName(), is(equalTo("CronosPro-Italic")));
 
-    assertThat(sut.getFontKeys(), hasSize(4));
-    assertThat(sut.getFontKeys(),
+    assertThat(this.sut.getFontKeys(), hasSize(4));
+    assertThat(this.sut.getFontKeys(),
         containsInAnyOrder("cronos-pro-regular", "cronos-pro-italic", "menomonia", "menomonia-italic"));
   }
 
   @Test
   public void testLoadAllFontsFromResourcesInSpecialDir() {
-    sut.clear();
-    sut.loadAllFontsFromResources("font/special");
+    this.sut.loadAllFontsFromResources("font/special");
 
-    Optional<Font> menomonia = sut.getFont("menomonia");
+    Optional<Font> menomonia = this.sut.getFont("menomonia");
     assertThat(menomonia, is(optionalWithValue()));
 
-    Optional<Font> menomoniaItalic = sut.getFont("menomonia-italic");
+    Optional<Font> menomoniaItalic = this.sut.getFont("menomonia-italic");
     assertThat(menomoniaItalic, is(optionalWithValue()));
 
-    assertThat(sut.getFontKeys(), hasSize(2));
-    assertThat(sut.getFontKeys(), containsInAnyOrder("menomonia", "menomonia-italic"));
+    assertThat(this.sut.getFontKeys(), hasSize(2));
+    assertThat(this.sut.getFontKeys(), containsInAnyOrder("menomonia", "menomonia-italic"));
   }
 
   @Test
   public void testLoadAllFontsFromResourcesWithDirectoryTypeAndFileEstension() {
-    sut.clear();
-    sut.loadAllFontsFromResources("font/special", Font.TRUETYPE_FONT, ".ttf");
+    this.sut.loadAllFontsFromResources("font/special", Font.TRUETYPE_FONT, ".ttf");
 
-    Optional<Font> menomonia = sut.getFont("menomonia");
+    Optional<Font> menomonia = this.sut.getFont("menomonia");
     assertThat(menomonia, is(optionalWithValue()));
 
-    Optional<Font> menomoniaItalic = sut.getFont("menomonia-italic");
+    Optional<Font> menomoniaItalic = this.sut.getFont("menomonia-italic");
     assertThat(menomoniaItalic, is(optionalWithValue()));
 
-    assertThat(sut.getFontKeys(), hasSize(2));
-    assertThat(sut.getFontKeys(), containsInAnyOrder("menomonia", "menomonia-italic"));
+    assertThat(this.sut.getFontKeys(), hasSize(2));
+    assertThat(this.sut.getFontKeys(), containsInAnyOrder("menomonia", "menomonia-italic"));
   }
 
   @Test
   public void testGetFontWithMissingFont() {
-    Optional<Font> font = sut.getFont("missingfont");
+    Optional<Font> font = this.sut.getFont("missingfont");
     assertThat(font, is(emptyOptional()));
   }
 
   @Test
   public void testGetFontWithGivenSize() {
-    sut.loadAllFontsFromResources("font/special");
-    Optional<Font> font = sut.getFont("menomonia", 26f);
+    this.sut.loadAllFontsFromResources("font/special");
+    Optional<Font> font = this.sut.getFont("menomonia", 26f);
     assertThat(font, is(optionalWithValue()));
     assertThat(font.get().getSize(), is(equalTo(26)));
   }
 
   @Test
   public void testGetFontWithGivenStyle() {
-    sut.loadAllFontsFromResources("font/special");
-    Optional<Font> font = sut.getFont("menomonia", Font.BOLD);
+    this.sut.loadAllFontsFromResources("font/special");
+    Optional<Font> font = this.sut.getFont("menomonia", Font.BOLD);
     assertThat(font, is(optionalWithValue()));
     assertThat(font.get().isBold(), is(equalTo(true)));
   }
 
   @Test
   public void testGetFontWithGivenTransformation() {
-    sut.loadAllFontsFromResources("font/special");
+    this.sut.loadAllFontsFromResources("font/special");
     AffineTransform affineTransform = new AffineTransform();
     affineTransform.rotate(Math.PI / 2);
-    Optional<Font> font = sut.getFont("menomonia", affineTransform);
+    Optional<Font> font = this.sut.getFont("menomonia", affineTransform);
     assertThat(font, is(optionalWithValue()));
     assertThat(font.get().getTransform(), is(equalTo(affineTransform)));
   }
 
   @Test
   public void testGetFontWithGivenSizeAndStyle() {
-    sut.loadAllFontsFromResources("font/special");
-    Optional<Font> font = sut.getFont("menomonia", 26f, Font.BOLD);
+    this.sut.loadAllFontsFromResources("font/special");
+    Optional<Font> font = this.sut.getFont("menomonia", 26f, Font.BOLD);
     assertThat(font, is(optionalWithValue()));
     assertThat(font.get().getSize(), is(equalTo(26)));
     assertThat(font.get().isBold(), is(equalTo(true)));
@@ -131,10 +139,10 @@ public class FontManagerTest {
 
   @Test
   public void testGetFontWithGivenStyleAndTransformation() {
-    sut.loadAllFontsFromResources("font/special");
+    this.sut.loadAllFontsFromResources("font/special");
     AffineTransform affineTransform = new AffineTransform();
     affineTransform.rotate(Math.PI / 2);
-    Optional<Font> font = sut.getFont("menomonia", Font.BOLD, affineTransform);
+    Optional<Font> font = this.sut.getFont("menomonia", Font.BOLD, affineTransform);
     assertThat(font, is(optionalWithValue()));
     assertThat(font.get().isBold(), is(equalTo(true)));
     assertThat(font.get().getTransform(), is(equalTo(affineTransform)));
@@ -142,10 +150,10 @@ public class FontManagerTest {
 
   @Test
   public void testGetFontWithGivenSizeAndTransformation() {
-    sut.loadAllFontsFromResources("font/special");
+    this.sut.loadAllFontsFromResources("font/special");
     AffineTransform affineTransform = new AffineTransform();
     affineTransform.rotate(Math.PI / 2);
-    Optional<Font> font = sut.getFont("menomonia", 26f, affineTransform);
+    Optional<Font> font = this.sut.getFont("menomonia", 26f, affineTransform);
     assertThat(font, is(optionalWithValue()));
     assertThat(font.get().getSize(), is(equalTo(26)));
     assertThat(font.get().getTransform(), is(equalTo(affineTransform)));
@@ -153,10 +161,10 @@ public class FontManagerTest {
 
   @Test
   public void testGetFontWithGivenSizeAndStyleAndTransformation() {
-    sut.loadAllFontsFromResources("font/special");
+    this.sut.loadAllFontsFromResources("font/special");
     AffineTransform affineTransform = new AffineTransform();
     affineTransform.rotate(Math.PI / 2);
-    Optional<Font> font = sut.getFont("menomonia", 26f, Font.BOLD, affineTransform);
+    Optional<Font> font = this.sut.getFont("menomonia", 26f, Font.BOLD, affineTransform);
     assertThat(font, is(optionalWithValue()));
     assertThat(font.get().getSize(), is(equalTo(26)));
     assertThat(font.get().isBold(), is(equalTo(true)));
@@ -165,9 +173,9 @@ public class FontManagerTest {
 
   @Test
   public void testClear() {
-    sut.loadAllFontsFromResources("font");
-    assertThat(sut.getFontKeys(), is(not(empty())));
-    sut.clear();
-    assertThat(sut.getFontKeys(), is(empty()));
+    this.sut.loadAllFontsFromResources("font");
+    assertThat(this.sut.getFontKeys(), is(not(empty())));
+    this.sut.clear();
+    assertThat(this.sut.getFontKeys(), is(empty()));
   }
 }

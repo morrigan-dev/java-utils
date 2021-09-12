@@ -17,10 +17,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Diese Klasse verwaltet alle Schriftarten, die für diese Anwendung benötigt werden. Da Anwendungen auf
- * unterschiedlichen Betriebssystemen laufen können, müssen sämtliche Schriftarten mit ausgeliefert werden und über
- * diesen Manager geladen und zur Verfügung gestellt werden.
- * 
+ * Hier werden alle Schriftarten verwaltet, die für eine Anwendung benötigt werden. Da Anwendungen auf unterschiedlichen
+ * Betriebssystemen laufen können, müssen sämtliche Schriftarten mit ausgeliefert werden und über diesen Manager geladen
+ * und zur Verfügung gestellt werden.
+ *
  * @author morrigan
  */
 public class FontManager {
@@ -42,12 +42,12 @@ public class FontManager {
   private FontManager() {
     super();
 
-    fontCache = new HashMap<>();
+    this.fontCache = new HashMap<>();
   }
 
   /**
    * Prüft die Verfügbarkeit einer Schriftart und liefert diese zurück.
-   * 
+   *
    * @param fontName Name einer Schriftart
    * @return eine Schriftart
    */
@@ -57,7 +57,7 @@ public class FontManager {
 
   /**
    * Prüft die Verfügbarkeit einer Schriftart und liefert diese in der angegebenen Größe zurück.
-   * 
+   *
    * @param fontName Name einer Schriftart
    * @param size Größe einer Schriftart ({@link Font#deriveFont(float)} wird genutzt)
    * @return eine Schriftart
@@ -68,7 +68,7 @@ public class FontManager {
 
   /**
    * Prüft die Verfügbarkeit einer Schriftart und liefert diese in dem angegebenen Style zurück.
-   * 
+   *
    * @param fontName Name einer Schriftart
    * @param style Style einer Schriftart ({@link Font#deriveFont(int)} wird genutzt)
    * @return eine Schriftart
@@ -79,7 +79,7 @@ public class FontManager {
 
   /**
    * Prüft die Verfügbarkeit einer Schriftart und liefert diese mit der angegebenen Transformation zurück.
-   * 
+   *
    * @param fontName Name einer Schriftart
    * @param trans Transformation einer Schriftart ({@link Font#deriveFont(AffineTransform)} wird genutzt)
    * @return eine Schriftart
@@ -90,7 +90,7 @@ public class FontManager {
 
   /**
    * Prüft die Verfügbarkeit einer Schriftart und liefert diese in der angegebenen Größe und Style zurück.
-   * 
+   *
    * @param fontName Name einer Schriftart
    * @param size Größe einer Schriftart ({@link Font#deriveFont(float)} wird genutzt)
    * @param style Style einer Schriftart ({@link Font#deriveFont(int)} wird genutzt)
@@ -102,7 +102,7 @@ public class FontManager {
 
   /**
    * Prüft die Verfügbarkeit einer Schriftart und liefert diese in der angegebenen Größe und Transformation zurück.
-   * 
+   *
    * @param fontName Name einer Schriftart
    * @param size Größe einer Schriftart ({@link Font#deriveFont(float)} wird genutzt)
    * @param trans Transformation einer Schriftart ({@link Font#deriveFont(AffineTransform)} wird genutzt)
@@ -114,7 +114,7 @@ public class FontManager {
 
   /**
    * Prüft die Verfügbarkeit einer Schriftart und liefert diese in dem angegebenen Style und Transformation zurück.
-   * 
+   *
    * @param fontName Name einer Schriftart
    * @param style Style einer Schriftart ({@link Font#deriveFont(int)} wird genutzt)
    * @param trans Transformation einer Schriftart ({@link Font#deriveFont(AffineTransform)} wird genutzt)
@@ -127,7 +127,7 @@ public class FontManager {
   /**
    * Prüft die Verfügbarkeit einer Schriftart und liefert diese in der angegebenen Größe, Style und Transformation
    * zurück.
-   * 
+   *
    * @param fontName Name einer Schriftart
    * @param size Größe einer Schriftart ({@link Font#deriveFont(float)} wird genutzt)
    * @param style Style einer Schriftart ({@link Font#deriveFont(int)} wird genutzt)
@@ -149,7 +149,7 @@ public class FontManager {
   /**
    * Lädt alle Schriftarten aus den resource Verzeichnissen, die auf dem Classpath liegen. Die Schriftarten müssen dabei
    * die Dateiendung .ttf besitzen und es muss sich um {@link Font#TRUETYPE_FONT} Schriftarten handeln.
-   * 
+   *
    * @param directory Pfad zu einem Unterverzeichnis beginnend bei resource in dem die Schrifarten liegen
    */
   public void loadAllFontsFromResources(String directory) {
@@ -158,7 +158,7 @@ public class FontManager {
 
   /**
    * Lädt alle Schriftarten aus den resource Verzeichnissen, die auf dem Classpath liegen.
-   * 
+   *
    * @param directory Pfad zu einem Unterverzeichnis beginnend bei resource in dem die Schrifarten liegen
    * @param fontType Schrittyp (z.b. {@link Font#TRUETYPE_FONT})
    * @param fileExtension Dateiendung der Schriftarten (z.B. .ttf)
@@ -168,10 +168,10 @@ public class FontManager {
     Set<String> availableFonts = reflections.getResources(Pattern.compile(".*\\" + fileExtension));
 
     int counter = 0;
-    for (String font : availableFonts) {
-      String baseName = FilenameUtils.getBaseName(font);
+    for (String fontPath : availableFonts) {
+      String baseName = FilenameUtils.getBaseName(fontPath);
       try {
-        addFont(baseName, fontType, font);
+        addFont(baseName, fontType, fontPath);
         counter++;
       } catch (FontFormatException | IOException e) {
         LOG.error(e.getMessage(), e);
@@ -184,42 +184,42 @@ public class FontManager {
   /**
    * Alle Keys zu denen eine Font gefunden und in diesem Manager hinterlegt wurde. Mit diesen Keys können gezielt
    * einzelne Fonts abgerufen werden.
-   * 
+   *
    * @return eine Menge von Keys.
    */
   public Set<String> getFontKeys() {
-    return fontCache.keySet();
+    return this.fontCache.keySet();
   }
 
   /**
    * Löscht alle geladenen Schriftarten aus dem Cache.
    */
   public void clear() {
-    fontCache.clear();
+    this.fontCache.clear();
   }
 
-  private void addFont(String key, int fontType, String filename) throws FontFormatException, IOException {
-    fontCache.put(key, Font.createFont(fontType, getClass().getResourceAsStream("/" + filename)));
+  private void addFont(String key, int fontType, String filePath) throws FontFormatException, IOException {
+    this.fontCache.put(key, Font.createFont(fontType, getClass().getResourceAsStream("/" + filePath)));
   }
 
   private Optional<Font> getFont(String fontName, Optional<Float> size, Optional<Integer> style,
       Optional<AffineTransform> trans) {
-    Optional<Font> font = Optional.ofNullable(fontCache.get(fontName));
-    if (font.isPresent()) {
-      Font origFont = font.get();
+    Optional<Font> result = Optional.ofNullable(this.fontCache.get(fontName));
+    if (result.isPresent()) {
+      Font font = result.get();
       if (size.isPresent()) {
-        origFont = origFont.deriveFont(size.get());
+        font = font.deriveFont(size.get());
       }
       if (style.isPresent()) {
-        origFont = origFont.deriveFont(style.get());
+        font = font.deriveFont(style.get());
       }
       if (trans.isPresent()) {
-        origFont = origFont.deriveFont(trans.get());
+        font = font.deriveFont(trans.get());
       }
-      font = Optional.of(origFont);
+      result = Optional.of(font);
     } else {
       LOG.warn("Font with name {} is not available!", fontName);
     }
-    return font;
+    return result;
   }
 }

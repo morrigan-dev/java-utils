@@ -18,7 +18,7 @@
 	</Appenders>
 	<Loggers>
 		<!-- TODO Logging test ermöglichen: https://medium.com/@BillyKorando/how-to-test-logging-in-java-part-two-parallel-boogaloo-28d563c15a3d -->
-		<Logger name="de.morrigan.dev" level="OFF" additivity="false">
+		<Logger name="de.morrigan.dev" level="INFO" additivity="false">
 			<AppenderRef ref="FileLogger" />
 			<AppenderRef ref="STDOUT" />
 		</Logger>
