@@ -52,8 +52,8 @@ public class ImageManagerTest {
     Color colorRed = new Color(((BufferedImage) redImage.get()).getRGB(10, 10));
     assertThat(colorRed.getRed(), is(equalTo(255)));
 
-    assertThat(this.sut.getImageKeys(), hasSize(12));
-    assertThat(this.sut.getImageKeys(),
+    assertThat(this.sut.getImageNames(), hasSize(12));
+    assertThat(this.sut.getImageNames(),
         containsInAnyOrder("20x20_green-bmp", "20x20_green-gif", "20x20_green-ico", "20x20_green-jpg",
             "20x20_green-png", "20x20_green-tif", "20x20_red-bmp", "20x20_red-gif", "20x20_red-ico", "20x20_red-jpg",
             "20x20_red-png", "20x20_red-tif"));
@@ -73,8 +73,8 @@ public class ImageManagerTest {
     Color colorRed = new Color(((BufferedImage) redImage.get()).getRGB(10, 10));
     assertThat(colorRed.getRed(), is(equalTo(255)));
 
-    assertThat(this.sut.getImageKeys(), hasSize(12));
-    assertThat(this.sut.getImageKeys(),
+    assertThat(this.sut.getImageNames(), hasSize(12));
+    assertThat(this.sut.getImageNames(),
         containsInAnyOrder("20x20_green-bmp", "20x20_green-gif", "20x20_green-ico", "20x20_green-jpg",
             "20x20_green-png", "20x20_green-tif", "20x20_red-bmp", "20x20_red-gif", "20x20_red-ico", "20x20_red-jpg",
             "20x20_red-png", "20x20_red-tif"));
@@ -89,8 +89,8 @@ public class ImageManagerTest {
     Color colorRed = new Color(((BufferedImage) redImage.get()).getRGB(10, 10));
     assertThat(colorRed.getRed(), is(equalTo(255)));
 
-    assertThat(this.sut.getImageKeys(), hasSize(6));
-    assertThat(this.sut.getImageKeys(),
+    assertThat(this.sut.getImageNames(), hasSize(6));
+    assertThat(this.sut.getImageNames(),
         containsInAnyOrder("20x20_red-bmp", "20x20_red-gif", "20x20_red-ico", "20x20_red-jpg", "20x20_red-png",
             "20x20_red-tif"));
   }
@@ -98,43 +98,43 @@ public class ImageManagerTest {
   @Test
   public void testLoadAllImagesFromResourcesWithBmpExtension() {
     this.sut.loadAllImagesFromResources("images", ".bmp");
-    assertThat(this.sut.getImageKeys(), hasSize(2));
-    assertThat(this.sut.getImageKeys(), containsInAnyOrder("20x20_red-bmp", "20x20_green-bmp"));
+    assertThat(this.sut.getImageNames(), hasSize(2));
+    assertThat(this.sut.getImageNames(), containsInAnyOrder("20x20_red-bmp", "20x20_green-bmp"));
   }
 
   @Test
   public void testLoadAllImagesFromResourcesWithGifExtension() {
     this.sut.loadAllImagesFromResources("images", ".gif");
-    assertThat(this.sut.getImageKeys(), hasSize(2));
-    assertThat(this.sut.getImageKeys(), containsInAnyOrder("20x20_red-gif", "20x20_green-gif"));
+    assertThat(this.sut.getImageNames(), hasSize(2));
+    assertThat(this.sut.getImageNames(), containsInAnyOrder("20x20_red-gif", "20x20_green-gif"));
   }
 
   @Test
   public void testLoadAllImagesFromResourcesWithIcoExtension() {
     this.sut.loadAllImagesFromResources("images", ".ico");
-    assertThat(this.sut.getImageKeys(), hasSize(2));
-    assertThat(this.sut.getImageKeys(), containsInAnyOrder("20x20_red-ico", "20x20_green-ico"));
+    assertThat(this.sut.getImageNames(), hasSize(2));
+    assertThat(this.sut.getImageNames(), containsInAnyOrder("20x20_red-ico", "20x20_green-ico"));
   }
 
   @Test
   public void testLoadAllImagesFromResourcesWithJpgExtension() {
     this.sut.loadAllImagesFromResources("images", ".jpg");
-    assertThat(this.sut.getImageKeys(), hasSize(2));
-    assertThat(this.sut.getImageKeys(), containsInAnyOrder("20x20_red-jpg", "20x20_green-jpg"));
+    assertThat(this.sut.getImageNames(), hasSize(2));
+    assertThat(this.sut.getImageNames(), containsInAnyOrder("20x20_red-jpg", "20x20_green-jpg"));
   }
 
   @Test
   public void testLoadAllImagesFromResourcesWithPngExtension() {
     this.sut.loadAllImagesFromResources("images", ".png");
-    assertThat(this.sut.getImageKeys(), hasSize(2));
-    assertThat(this.sut.getImageKeys(), containsInAnyOrder("20x20_red-png", "20x20_green-png"));
+    assertThat(this.sut.getImageNames(), hasSize(2));
+    assertThat(this.sut.getImageNames(), containsInAnyOrder("20x20_red-png", "20x20_green-png"));
   }
 
   @Test
   public void testLoadAllImagesFromResourcesWithTifExtension() {
     this.sut.loadAllImagesFromResources("images", ".tif");
-    assertThat(this.sut.getImageKeys(), hasSize(2));
-    assertThat(this.sut.getImageKeys(), containsInAnyOrder("20x20_red-tif", "20x20_green-tif"));
+    assertThat(this.sut.getImageNames(), hasSize(2));
+    assertThat(this.sut.getImageNames(), containsInAnyOrder("20x20_red-tif", "20x20_green-tif"));
   }
 
   @Test
@@ -224,8 +224,8 @@ public class ImageManagerTest {
   @Test
   public void testClear() {
     this.sut.loadAllImagesFromResources("images");
-    assertThat(this.sut.getImageKeys(), is(not(empty())));
+    assertThat(this.sut.getImageNames(), is(not(empty())));
     this.sut.clear();
-    assertThat(this.sut.getImageKeys(), is(empty()));
+    assertThat(this.sut.getImageNames(), is(empty()));
   }
 }

@@ -46,8 +46,8 @@ public class FontManagerTest {
     assertThat(cronosItalic, is(optionalWithValue()));
     assertThat(cronosItalic.get().getFontName(), is(equalTo("CronosPro-Italic")));
 
-    assertThat(this.sut.getFontKeys(), hasSize(4));
-    assertThat(this.sut.getFontKeys(),
+    assertThat(this.sut.getFontNames(), hasSize(4));
+    assertThat(this.sut.getFontNames(),
         containsInAnyOrder("cronos-pro-regular", "cronos-pro-italic", "menomonia", "menomonia-italic"));
   }
 
@@ -63,8 +63,8 @@ public class FontManagerTest {
     assertThat(cronosItalic, is(optionalWithValue()));
     assertThat(cronosItalic.get().getFontName(), is(equalTo("CronosPro-Italic")));
 
-    assertThat(this.sut.getFontKeys(), hasSize(4));
-    assertThat(this.sut.getFontKeys(),
+    assertThat(this.sut.getFontNames(), hasSize(4));
+    assertThat(this.sut.getFontNames(),
         containsInAnyOrder("cronos-pro-regular", "cronos-pro-italic", "menomonia", "menomonia-italic"));
   }
 
@@ -78,8 +78,8 @@ public class FontManagerTest {
     Optional<Font> menomoniaItalic = this.sut.getFont("menomonia-italic");
     assertThat(menomoniaItalic, is(optionalWithValue()));
 
-    assertThat(this.sut.getFontKeys(), hasSize(2));
-    assertThat(this.sut.getFontKeys(), containsInAnyOrder("menomonia", "menomonia-italic"));
+    assertThat(this.sut.getFontNames(), hasSize(2));
+    assertThat(this.sut.getFontNames(), containsInAnyOrder("menomonia", "menomonia-italic"));
   }
 
   @Test
@@ -92,8 +92,8 @@ public class FontManagerTest {
     Optional<Font> menomoniaItalic = this.sut.getFont("menomonia-italic");
     assertThat(menomoniaItalic, is(optionalWithValue()));
 
-    assertThat(this.sut.getFontKeys(), hasSize(2));
-    assertThat(this.sut.getFontKeys(), containsInAnyOrder("menomonia", "menomonia-italic"));
+    assertThat(this.sut.getFontNames(), hasSize(2));
+    assertThat(this.sut.getFontNames(), containsInAnyOrder("menomonia", "menomonia-italic"));
   }
 
   @Test
@@ -174,8 +174,8 @@ public class FontManagerTest {
   @Test
   public void testClear() {
     this.sut.loadAllFontsFromResources("font");
-    assertThat(this.sut.getFontKeys(), is(not(empty())));
+    assertThat(this.sut.getFontNames(), is(not(empty())));
     this.sut.clear();
-    assertThat(this.sut.getFontKeys(), is(empty()));
+    assertThat(this.sut.getFontNames(), is(empty()));
   }
 }

@@ -24,6 +24,16 @@ import org.slf4j.LoggerFactory;
 /**
  * Hier werden alle Bilder verwaltet, die in einer Anwendung genutzt werden sollen. Die Bilder werden in einen Cache
  * geladen und können dann nach Bedarf abgerufen und angezeigt werden.
+ * <p>
+ * Aktuell werden folgende Bildformate unterstützt.
+ * <ul>
+ * <li>Joint Photographic Experts Group (JPG/JEPG)</li>
+ * <li>Graphics Interchange Format (GIF)</li>
+ * <li>Portable Network Graphics (PNG)</li>
+ * <li>Tagged Image File Format (TIF/TIFF)</li>
+ * <li>Windows Bitmap (BMP)</li>
+ * <li>Microsoft Icon (ICO)</li>
+ * </ul>
  *
  * @author morrigan
  */
@@ -41,7 +51,7 @@ public class ImageManager {
 
   /** Unterstützte Dateiendungen */
   private static final String[] SUPPORTED_FILE_EXTENSIONS = new String[] {
-      ".bmp", ".gif", ".ico", ".jpg", ".png", ".tif"
+      ".bmp", ".gif", ".ico", ".jpg", ".jpeg", ".png", ".tif", "tiff"
   };
 
   /** Beinhaltet alle geladenen Bilder und können über einen entsprechenden Schlüssel abgerufen werden */
@@ -119,14 +129,30 @@ public class ImageManager {
     return getImageIcon(imageName, Optional.of(scaleToDimension.width), Optional.of(scaleToDimension.height));
   }
 
+  /**
+   * Lädt alle Bilder aus den resource Verzeichnissen, die auf dem Classpath liegen. Die Bilder müssen dabei eine der
+   * unterstützten Dateiendungen besitzen.
+   */
   public void loadAllImagesFromResources() {
     loadAllImagesFromResources("", SUPPORTED_FILE_EXTENSIONS);
   }
 
+  /**
+   * Lädt alle Bilder aus den resource Verzeichnissen, die auf dem Classpath liegen. Die Bilder müssen dabei eine der
+   * unterstützten Dateiendungen besitzen.
+   *
+   * @param directory Pfad zu einem Unterverzeichnis beginnend bei resource in dem die Bilder liegen
+   */
   public void loadAllImagesFromResources(String directory) {
     loadAllImagesFromResources(directory, SUPPORTED_FILE_EXTENSIONS);
   }
 
+  /**
+   * Lädt alle Bilder mit den angegebenen Dateiendungen aus den resource Verzeichnissen, die auf dem Classpath liegen.
+   *
+   * @param directory Pfad zu einem Unterverzeichnis beginnend bei resource in dem die Bilder liegen
+   * @param fileExtensions Liste mit zu ladenden Dateiendungen
+   */
   public void loadAllImagesFromResources(String directory, String... fileExtensions) {
     Reflections reflections = new Reflections(directory, new ResourcesScanner());
     Set<String> availableImages = new HashSet<>();
@@ -150,16 +176,25 @@ public class ImageManager {
     LOG.info("{} Bilder erfolgreich geladen...", counter);
   }
 
-  public Set<String> getImageKeys() {
+  /**
+   * Alle Bildnamen zu denen ein Bild gefunden und in diesem Manager hinterlegt wurde. Mit diesen Bildnamen können
+   * gezielt einzelne Bilder abgerufen werden.
+   *
+   * @return eine Menge von Bildnamen
+   */
+  public Set<String> getImageNames() {
     return this.imageCache.keySet();
   }
 
+  /**
+   * Löscht alle geladenen Bilder aus dem Cache.
+   */
   public void clear() {
     this.imageCache.clear();
   }
 
-  private void addImage(String key, String filePath) throws IOException {
-    this.imageCache.put(key, ImageIO.read(getClass().getResourceAsStream("/" + filePath)));
+  private void addImage(String imageName, String filePath) throws IOException {
+    this.imageCache.put(imageName, ImageIO.read(getClass().getResourceAsStream("/" + filePath)));
   }
 
   private Optional<ImageIcon> getImageIcon(String imageName, Optional<Integer> scaleToWidth,
@@ -182,17 +217,17 @@ public class ImageManager {
       BufferedImage img = (BufferedImage) result.get();
       width = img.getWidth();
       height = img.getHeight();
-    }
-    if (scaleToWidth.isPresent()) {
-      newWidth = scaleToWidth.get();
-    }
-    if (scaleToHeight.isPresent()) {
-      newHeight = scaleToHeight.get();
-    }
-    if (newWidth > 0 && newHeight > 0) {
-      if ((width != newWidth || height != newHeight) && result.isPresent()) {
+      if (scaleToWidth.isPresent()) {
+        newWidth = scaleToWidth.get();
+      }
+      if (scaleToHeight.isPresent()) {
+        newHeight = scaleToHeight.get();
+      }
+      if ((newWidth > 0 && newHeight > 0) && (width != newWidth || height != newHeight)) {
         result = Optional.of(result.get().getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH));
       }
+    } else {
+      LOG.warn("Image with name {} is not available!", imageName);
     }
     return result;
   }

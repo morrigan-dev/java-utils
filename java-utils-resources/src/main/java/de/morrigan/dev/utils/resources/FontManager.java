@@ -182,12 +182,12 @@ public class FontManager {
   }
 
   /**
-   * Alle Keys zu denen eine Font gefunden und in diesem Manager hinterlegt wurde. Mit diesen Keys können gezielt
-   * einzelne Fonts abgerufen werden.
+   * Alle Schritnamen zu denen eine Schrift gefunden und in diesem Manager hinterlegt wurde. Mit diesen Schriftnamen
+   * können gezielt einzelne Schriften abgerufen werden.
    *
-   * @return eine Menge von Keys.
+   * @return eine Menge von Schriftnamen
    */
-  public Set<String> getFontKeys() {
+  public Set<String> getFontNames() {
     return this.fontCache.keySet();
   }
 
@@ -198,8 +198,8 @@ public class FontManager {
     this.fontCache.clear();
   }
 
-  private void addFont(String key, int fontType, String filePath) throws FontFormatException, IOException {
-    this.fontCache.put(key, Font.createFont(fontType, getClass().getResourceAsStream("/" + filePath)));
+  private void addFont(String fontName, int fontType, String filePath) throws FontFormatException, IOException {
+    this.fontCache.put(fontName, Font.createFont(fontType, getClass().getResourceAsStream("/" + filePath)));
   }
 
   private Optional<Font> getFont(String fontName, Optional<Float> size, Optional<Integer> style,
