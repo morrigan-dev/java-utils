@@ -28,6 +28,7 @@ public class LanguageManagerTest {
   @Before
   public void setup() {
     ResourceBundle.clearCache();
+    Locale.setDefault(Locale.GERMANY);
   }
 
   @Test
