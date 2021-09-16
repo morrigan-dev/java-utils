@@ -13,6 +13,7 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.helpers.MessageFormatter;
 
 /**
  * Hier werden alle Beschriftungen und Texte verwaltet, die für eine Anwendung benötigt werden. Da Anwendungen häufig
@@ -75,49 +76,58 @@ public class LanguageManager {
 
   /**
    * Ermittelt zu einem Nachrichtenschlüssel eine entsprechende Nachricht und liefert diese zurück. Die Nachricht wird
-   * in der Sprache zurückgegeben, die als Default ({@link Locale#getDefault()}) in der JVM hinterlegt ist.
+   * in der Sprache zurückgegeben, die als Default ({@link Locale#getDefault()}) in der JVM hinterlegt ist. Sofern die
+   * Nachricht Platzhalter für Parameter besitzt werden diese mit den angegebenen Parametern befüllt. (see
+   * {@link MessageFormatter})
    *
    * @param key Nachrichtenschlüssel
+   * @param parameters Parameter, die statt der Platzhalter in der Nachricht eingefügt werden
    * @return eine Nachricht oder ein Leerstring, falls es zu dem Schlüssel keine Beschriftung gibt.
    */
-  public String getMessage(String key) {
-    return getValue(Bundle.MESSAGES, key, Locale.getDefault());
+  public String getMessage(String key, Object... parameters) {
+    return replacePlaceholder(getValue(Bundle.MESSAGES, key, Locale.getDefault()), parameters);
   }
 
   /**
    * Ermittelt zu einem Beschriftungsschlüssel eine entsprechende Beschriftung und liefert diese in der angegebenen
-   * Sprache zurück.
+   * Sprache zurück. Sofern die Nachricht Platzhalter für Parameter besitzt werden diese mit den angegebenen Parametern
+   * befüllt. (see {@link MessageFormatter})
    *
    * @param key Nachrichtenschlüssel
    * @param locale Sprachspezifischer Ort
+   * @param parameters Parameter, die statt der Platzhalter in der Nachricht eingefügt werden
    * @return eine Beschriftung oder ein Leerstring, falls es zu dem Schlüssel keine Beschriftung gibt.
    */
-  public String getMessage(String key, Locale locale) {
-    return getValue(Bundle.MESSAGES, key, locale);
+  public String getMessage(String key, Locale locale, Object... parameters) {
+    return replacePlaceholder(getValue(Bundle.MESSAGES, key, locale), parameters);
   }
 
   /**
    * Ermittelt zu einem Fehlerschlüssel eine entsprechende Fehlerbeschreibung und liefert diese zurück. Die
    * Fehlerbeschreibung wird in der Sprache zurückgegeben, die als Default ({@link Locale#getDefault()}) in der JVM
-   * hinterlegt ist.
+   * hinterlegt ist. Sofern die Fehlerbeschreibung Platzhalter für Parameter besitzt werden diese mit den angegebenen
+   * Parametern befüllt. (see {@link MessageFormatter})
    *
    * @param key Fehlerschlüssel
+   * @param parameters Parameter, die statt der Platzhalter in der Fehlerbeschreibung eingefügt werden
    * @return eine Fehlerbeschreibung oder ein Leerstring, falls es zu dem Schlüssel keine Beschriftung gibt.
    */
-  public String getError(String key) {
-    return getValue(Bundle.ERRORS, key, Locale.getDefault());
+  public String getError(String key, Object... parameters) {
+    return replacePlaceholder(getValue(Bundle.ERRORS, key, Locale.getDefault()), parameters);
   }
 
   /**
    * Ermittelt zu einem Fehlerschlüssel eine entsprechende Fehlerbeschreibung und lieder diese in der angegebenen
-   * Sprache zurück.
+   * Sprache zurück. Sofern die Fehlerbeschreibung Platzhalter für Parameter besitzt werden diese mit den angegebenen
+   * Parametern befüllt. (see {@link MessageFormatter})
    *
    * @param key Fehlerschlüssel
    * @param locale Sprachspezifischer Ort
+   * @param parameters Parameter, die statt der Platzhalter in der Fehlerbeschreibung eingefügt werden
    * @return eine Fehlerbeschreibung oder ein Leerstring, falls es zu dem Schlüssel keine Beschriftung gibt.
    */
-  public String getError(String key, Locale locale) {
-    return getValue(Bundle.ERRORS, key, locale);
+  public String getError(String key, Locale locale, Object... parameters) {
+    return replacePlaceholder(getValue(Bundle.ERRORS, key, locale), parameters);
   }
 
   /**
@@ -256,6 +266,10 @@ public class LanguageManager {
       result.add(keys.nextElement());
     }
     return result;
+  }
+
+  private String replacePlaceholder(String value, Object... parameters) {
+    return MessageFormatter.arrayFormat(value, parameters).getMessage();
   }
 
   private String getValue(Bundle bundleName, String key, Locale locale) {

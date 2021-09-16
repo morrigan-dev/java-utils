@@ -41,7 +41,7 @@ public class LanguageManagerTest {
   @Test
   public void testLoadErrorsFromResource() {
     this.sut.loadErrorsFromResources("language/errors");
-    assertThat(this.sut.getErrorKeys(), hasSize(1));
+    assertThat(this.sut.getErrorKeys(), hasSize(2));
   }
 
   @Test
@@ -66,7 +66,7 @@ public class LanguageManagerTest {
   @Test
   public void testLoadErrorsFromResourceWithLocalUK() {
     this.sut.loadErrorsFromResources("language/errors", Locale.UK);
-    assertThat(this.sut.getErrorKeys(Locale.UK), hasSize(2));
+    assertThat(this.sut.getErrorKeys(Locale.UK), hasSize(3));
   }
 
   @Test
@@ -103,9 +103,22 @@ public class LanguageManagerTest {
   }
 
   @Test
+  public void testGetMessageWithKeyAndParameters() {
+    this.sut.loadMessagesFromResources("language/messages");
+    assertThat(this.sut.getMessage("helloMsgWithParam", "Tom"), is(equalTo("Hallo und herzlich Willkommen Tom!")));
+  }
+
+  @Test
   public void testGetMessageWithExistingKeyAndLocaleFR() {
     this.sut.loadMessagesFromResources("language/messages", Locale.FRANCE);
     assertThat(this.sut.getMessage("helloMsg", Locale.FRANCE), is(equalTo("Bonjour et bienvenue!")));
+  }
+
+  @Test
+  public void testGetMessageWithKeyAndLocaleFRAndParameters() {
+    this.sut.loadMessagesFromResources("language/messages", Locale.FRANCE);
+    assertThat(this.sut.getMessage("helloMsgWithParams", Locale.FRANCE, "Tom", "Jerry"),
+        is(equalTo("Bonjour et bienvenue Tom and Jerry!")));
   }
 
   @Test
@@ -115,9 +128,23 @@ public class LanguageManagerTest {
   }
 
   @Test
+  public void testGetErrorWithKeyAndParameters() {
+    this.sut.loadErrorsFromResources("language/errors");
+    assertThat(this.sut.getError("E0002", NullPointerException.class),
+        is(equalTo("Es ist ein interner Fehler aufgetreten. Details: class java.lang.NullPointerException")));
+  }
+
+  @Test
   public void testGetErrorWithExistingKeyAndLocaleUK() {
     this.sut.loadErrorsFromResources("language/errors", Locale.UK);
     assertThat(this.sut.getError("E0001", Locale.UK), is(equalTo("Unknown error")));
+  }
+
+  @Test
+  public void testGetErrorWithKeyAndLocaleUKAndParameters() {
+    this.sut.loadErrorsFromResources("language/errors", Locale.UK);
+    assertThat(this.sut.getError("E0003", Locale.UK, "test.txt", 7),
+        is(equalTo("File comparison failed for file 'test.txt' in line '7'.")));
   }
 
   @Test
