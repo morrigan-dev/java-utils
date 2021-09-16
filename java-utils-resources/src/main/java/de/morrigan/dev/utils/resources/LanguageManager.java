@@ -14,11 +14,20 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Hier werden alle Beschriftungen und Texte verwaltet, die für eine Anwendung benötigt werden. Da Anwendungen häufig
+ * mehrsprachig angeboten werden, unterstützt dieser Manager mittels {@link ResourceBundle} Mehrsprachigkeit.
+ *
+ * @author morrigan
+ */
 public class LanguageManager {
 
   /** Logger für Debug/Fehlerausgaben */
   private static final Logger LOG = LoggerFactory.getLogger(LanguageManager.class);
 
+  /**
+   * @return einzige Instanz dieses Managers.
+   */
   public static LanguageManager getInstance() {
     return INSTANCE;
   }
@@ -40,89 +49,208 @@ public class LanguageManager {
     this.errors = new HashMap<>();
   }
 
+  /**
+   * Ermittelt zu einem Beschriftungsschlüssel eine entsprechende Beschriftung und liefert diese zurück. Die
+   * Beschriftung wird in der Sprache zurückgegeben, die als Default ({@link Locale#getDefault()}) in der JVM hinterlegt
+   * ist.
+   *
+   * @param key Beschriftungsschlüssel
+   * @return eine Beschriftung oder ein Leerstring, falls es zu dem Schlüssel keine Beschriftung gibt.
+   */
   public String getLabel(String key) {
     return getValue(Bundle.LABELS, key, Locale.getDefault());
   }
 
+  /**
+   * Ermittelt zu einem Beschriftungsschlüssel eine entsprechende Beschriftung und liefert diese in der angegebenen
+   * Sprache zurück.
+   *
+   * @param key Beschriftungsschlüssel
+   * @param locale Sprachspezifischer Ort
+   * @return eine Beschriftung oder ein Leerstring, falls es zu dem Schlüssel keine Beschriftung gibt.
+   */
   public String getLabel(String key, Locale locale) {
     return getValue(Bundle.LABELS, key, locale);
   }
 
+  /**
+   * Ermittelt zu einem Nachrichtenschlüssel eine entsprechende Nachricht und liefert diese zurück. Die Nachricht wird
+   * in der Sprache zurückgegeben, die als Default ({@link Locale#getDefault()}) in der JVM hinterlegt ist.
+   *
+   * @param key Nachrichtenschlüssel
+   * @return eine Nachricht oder ein Leerstring, falls es zu dem Schlüssel keine Beschriftung gibt.
+   */
   public String getMessage(String key) {
     return getValue(Bundle.MESSAGES, key, Locale.getDefault());
   }
 
+  /**
+   * Ermittelt zu einem Beschriftungsschlüssel eine entsprechende Beschriftung und liefert diese in der angegebenen
+   * Sprache zurück.
+   *
+   * @param key Nachrichtenschlüssel
+   * @param locale Sprachspezifischer Ort
+   * @return eine Beschriftung oder ein Leerstring, falls es zu dem Schlüssel keine Beschriftung gibt.
+   */
   public String getMessage(String key, Locale locale) {
     return getValue(Bundle.MESSAGES, key, locale);
   }
 
+  /**
+   * Ermittelt zu einem Fehlerschlüssel eine entsprechende Fehlerbeschreibung und liefert diese zurück. Die
+   * Fehlerbeschreibung wird in der Sprache zurückgegeben, die als Default ({@link Locale#getDefault()}) in der JVM
+   * hinterlegt ist.
+   *
+   * @param key Fehlerschlüssel
+   * @return eine Fehlerbeschreibung oder ein Leerstring, falls es zu dem Schlüssel keine Beschriftung gibt.
+   */
   public String getError(String key) {
     return getValue(Bundle.ERRORS, key, Locale.getDefault());
   }
 
+  /**
+   * Ermittelt zu einem Fehlerschlüssel eine entsprechende Fehlerbeschreibung und lieder diese in der angegebenen
+   * Sprache zurück.
+   *
+   * @param key Fehlerschlüssel
+   * @param locale Sprachspezifischer Ort
+   * @return eine Fehlerbeschreibung oder ein Leerstring, falls es zu dem Schlüssel keine Beschriftung gibt.
+   */
   public String getError(String key, Locale locale) {
     return getValue(Bundle.ERRORS, key, locale);
   }
 
+  /**
+   * Lädt alle Beschriftungen aus der angegebenen Ressource und stellt diese in diesem Manager zur Verfügung. Es wird
+   * eine Ressource für die aktuelle Default-Sprache ({@link Locale#getDefault()}) gesucht. Wird diese nicht gefunden,
+   * wird versucht eine Standard Ressource zu laden.<br>
+   * Es wird nur nach Ressourcen auf dem Classpath gesucht.
+   *
+   * @param baseName Name/Pfad zu einer Ressource
+   * @throws MissingResourceException falls die angegebene Ressource nicht gefunden werden kann.
+   * @see ResourceBundle#getBundle(String, Locale)
+   */
   public void loadLabelsFromResources(String baseName) {
     loadLabelsFromResources(Bundle.LABELS, baseName, Optional.empty());
   }
 
+  /**
+   * Lädt alle Beschriftungen aus der angegebenen Ressource und stellt diese in diesem Manager in der angegebenen
+   * Sprache zur Verfügung. Wird diese nicht gefunden, wird versucht eine Standard Ressource zu laden.<br>
+   * Es wird nur nach Ressourcen auf dem Classpath gesucht.
+   *
+   * @param baseName Name/Pfad zu einer Ressource
+   * @param locale Sprachspezifischer Ort
+   * @throws MissingResourceException falls die angegebene Ressource nicht gefunden werden kann.
+   * @see ResourceBundle#getBundle(String, Locale)
+   */
   public void loadLabelsFromResources(String baseName, Locale locale) {
     loadLabelsFromResources(Bundle.LABELS, baseName, Optional.of(locale));
   }
 
+  /**
+   * Lädt alle Nachrichten aus der angegebenen Ressource und stellt diese in diesem Manager zur Verfügung. Es wird eine
+   * Ressource für die aktuelle Default-Sprache ({@link Locale#getDefault()}) gesucht. Wird diese nicht gefunden, wird
+   * versucht eine Standard Ressource zu laden.<br>
+   * Es wird nur nach Ressourcen auf dem Classpath gesucht.
+   *
+   * @param baseName Name/Pfad zu einer Ressource
+   * @throws MissingResourceException falls die angegebene Ressource nicht gefunden werden kann.
+   * @see ResourceBundle#getBundle(String, Locale)
+   */
   public void loadMessagesFromResources(String baseName) {
     loadLabelsFromResources(Bundle.MESSAGES, baseName, Optional.empty());
   }
 
+  /**
+   * Lädt alle Nachrichten aus der angegebenen Ressource und stellt diese in diesem Manager in der angegebenen Sprache
+   * zur Verfügung. Wird diese nicht gefunden, wird versucht eine Standard Ressource zu laden.<br>
+   * Es wird nur nach Ressourcen auf dem Classpath gesucht.
+   *
+   * @param baseName Name/Pfad zu einer Ressource
+   * @param locale Sprachspezifischer Ort
+   * @throws MissingResourceException falls die angegebene Ressource nicht gefunden werden kann.
+   * @see ResourceBundle#getBundle(String, Locale)
+   */
   public void loadMessagesFromResources(String baseName, Locale locale) {
     loadLabelsFromResources(Bundle.MESSAGES, baseName, Optional.of(locale));
   }
 
+  /**
+   * Lädt alle Fehlerbeschreibungen aus der angegebenen Ressource und stellt diese in diesem Manager zur Verfügung. Es
+   * wird eine Ressource für die aktuelle Default-Sprache ({@link Locale#getDefault()}) gesucht. Wird diese nicht
+   * gefunden, wird versucht eine Standard Ressource zu laden.<br>
+   * Es wird nur nach Ressourcen auf dem Classpath gesucht.
+   *
+   * @param baseName Name/Pfad zu einer Ressource
+   * @throws MissingResourceException falls die angegebene Ressource nicht gefunden werden kann.
+   * @see ResourceBundle#getBundle(String, Locale)
+   */
   public void loadErrorsFromResources(String baseName) {
     loadLabelsFromResources(Bundle.ERRORS, baseName, Optional.empty());
   }
 
+  /**
+   * Lädt alle Fehlerbeschreibungen aus der angegebenen Ressource und stellt diese in diesem Manager in der angegebenen
+   * Sprache zur Verfügung. Wird diese nicht gefunden, wird versucht eine Standard Ressource zu laden.<br>
+   * Es wird nur nach Ressourcen auf dem Classpath gesucht.
+   *
+   * @param baseName Name/Pfad zu einer Ressource
+   * @param locale Sprachspezifischer Ort
+   * @throws MissingResourceException falls die angegebene Ressource nicht gefunden werden kann.
+   * @see ResourceBundle#getBundle(String, Locale)
+   */
   public void loadErrorsFromResources(String baseName, Locale locale) {
     loadLabelsFromResources(Bundle.ERRORS, baseName, Optional.of(locale));
   }
 
+  /**
+   * @return alle Beschriftungsschlüssel, die von diesem Manager in der Standard-Sprache verwaltet werden
+   */
   public Set<String> getLabelKeys() {
     return getLabelKeys(Locale.getDefault());
   }
 
+  /**
+   * @param locale Sprachspezifischer Ort
+   * @return alle Beschriftungsschlüssel, die von diesem Manager zur angegebenen Sprache verwaltet werden
+   */
   public Set<String> getLabelKeys(Locale locale) {
-    Set<String> result = new HashSet<>();
-    ResourceBundle bundle = getResourceBundle(Bundle.LABELS, locale);
-    Enumeration<String> keys = bundle.getKeys();
-    while (keys.hasMoreElements()) {
-      result.add(keys.nextElement());
-    }
-    return result;
+    return toSet(getResourceBundle(Bundle.LABELS, locale));
   }
 
+  /**
+   * @return alle Nachrichtenschlüssel, die von diesem Manager in der Standard-Sprache verwaltet werden
+   */
   public Set<String> getMessageKeys() {
     return getMessageKeys(Locale.getDefault());
   }
 
+  /**
+   * @param locale Sprachspezifischer Ort
+   * @return alle Nachrichtenschlüssel, die von diesem Manager zur angegebenen Sprache verwaltet werden
+   */
   public Set<String> getMessageKeys(Locale locale) {
-    Set<String> result = new HashSet<>();
-    ResourceBundle bundle = getResourceBundle(Bundle.MESSAGES, locale);
-    Enumeration<String> keys = bundle.getKeys();
-    while (keys.hasMoreElements()) {
-      result.add(keys.nextElement());
-    }
-    return result;
+    return toSet(getResourceBundle(Bundle.MESSAGES, locale));
   }
 
+  /**
+   * @return alle Fehlerschlüssel, die von diesem Manager in der Standard-Sprache verwaltet werden
+   */
   public Set<String> getErrorKeys() {
     return getErrorKeys(Locale.getDefault());
   }
 
+  /**
+   * @param locale Sprachspezifischer Ort
+   * @return alle Fehlerschlüssel, die von diesem Manager zur angegebenen Sprache verwaltet werden
+   */
   public Set<String> getErrorKeys(Locale locale) {
+    return toSet(getResourceBundle(Bundle.ERRORS, locale));
+  }
+
+  private Set<String> toSet(ResourceBundle bundle) {
     Set<String> result = new HashSet<>();
-    ResourceBundle bundle = getResourceBundle(Bundle.ERRORS, locale);
     Enumeration<String> keys = bundle.getKeys();
     while (keys.hasMoreElements()) {
       result.add(keys.nextElement());
