@@ -23,6 +23,7 @@ public class LanguageManagerTest {
   @Before
   public void setup() {
     ResourceBundle.clearCache();
+    this.sut.clear();
     Locale.setDefault(Locale.GERMANY);
   }
 
@@ -91,9 +92,33 @@ public class LanguageManagerTest {
   }
 
   @Test
+  public void testGetLabelWithColon() {
+    this.sut.loadLabelsFromResources("language/labels");
+    assertThat(this.sut.getLabelWithColon("helloWorld"), is(equalTo("Hallo Welt!:")));
+  }
+
+  @Test
+  public void testGetLabelWithColonButEmptyValue() {
+    this.sut.loadLabelsFromResources("language/labels");
+    assertThat(this.sut.getLabelWithColon("missing"), is(equalTo("")));
+  }
+
+  @Test
   public void testGetLabelWithExistingKeyAndLocaleFR() {
     this.sut.loadLabelsFromResources("language/labels", Locale.FRANCE);
     assertThat(this.sut.getLabel("helloWorld", Locale.FRANCE), is(equalTo("Bonjour le monde!")));
+  }
+
+  @Test
+  public void testGetLabelWithColonAndKeyAndLocaleFR() {
+    this.sut.loadLabelsFromResources("language/labels", Locale.FRANCE);
+    assertThat(this.sut.getLabelWithColon("helloWorld", Locale.FRANCE), is(equalTo("Bonjour le monde!:")));
+  }
+
+  @Test
+  public void testGetLabelWithColonAndKeyAndLocaleFRButEmptyValue() {
+    this.sut.loadLabelsFromResources("language/labels", Locale.FRANCE);
+    assertThat(this.sut.getLabelWithColon("missing", Locale.FRANCE), is(equalTo("")));
   }
 
   @Test
@@ -173,6 +198,22 @@ public class LanguageManagerTest {
     assertThat(this.sut.getLabel("hello"), is(equalTo("")));
     // TODO Logger warning prüfen.
     // by morrigan on 14.09.2021
+  }
+
+  @Test
+  public void testClear() {
+    this.sut.loadLabelsFromResources("language/labels", Locale.GERMANY);
+    assertThat(this.sut.getLabelKeys(Locale.GERMANY), hasSize(1));
+    this.sut.loadMessagesFromResources("language/messages", Locale.FRANCE);
+    assertThat(this.sut.getMessageKeys(Locale.FRANCE), hasSize(3));
+    this.sut.loadErrorsFromResources("language/errors", Locale.UK);
+    assertThat(this.sut.getErrorKeys(Locale.UK), hasSize(3));
+
+    this.sut.clear();
+
+    assertThrows(MissingResourceException.class, () -> this.sut.getLabelKeys(Locale.GERMANY));
+    assertThrows(MissingResourceException.class, () -> this.sut.getLabelKeys(Locale.FRANCE));
+    assertThrows(MissingResourceException.class, () -> this.sut.getLabelKeys(Locale.UK));
   }
 
 }

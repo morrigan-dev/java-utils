@@ -33,6 +33,8 @@ public class LanguageManager {
     return INSTANCE;
   }
 
+  private static final String COLON = ":";
+
   private static final LanguageManager INSTANCE = new LanguageManager();
 
   private enum Bundle {
@@ -63,6 +65,19 @@ public class LanguageManager {
   }
 
   /**
+   * Ermittelt zu einem Beschriftungsschlüssel eine entsprechende Beschriftung und liefert diese zurück. An die
+   * Beschriftung wird ein Doppelpunkt angehangen. Die Beschriftung wird in der Sprache zurückgegeben, die als Default
+   * ({@link Locale#getDefault()}) in der JVM hinterlegt ist.
+   *
+   * @param key Beschriftungsschlüssel
+   * @return eine Beschriftung oder ein Leerstring, falls es zu dem Schlüssel keine Beschriftung gibt.
+   */
+  public String getLabelWithColon(String key) {
+    String value = getValue(Bundle.LABELS, key, Locale.getDefault());
+    return StringUtils.isBlank(value) ? value : StringUtils.join(value, COLON);
+  }
+
+  /**
    * Ermittelt zu einem Beschriftungsschlüssel eine entsprechende Beschriftung und liefert diese in der angegebenen
    * Sprache zurück.
    *
@@ -72,6 +87,19 @@ public class LanguageManager {
    */
   public String getLabel(String key, Locale locale) {
     return getValue(Bundle.LABELS, key, locale);
+  }
+
+  /**
+   * Ermittelt zu einem Beschriftungsschlüssel eine entsprechende Beschriftung und liefert diese in der angegebenen
+   * Sprache zurück. An die Beschriftung wird ein Doppelpunkt angehangen.
+   *
+   * @param key Beschriftungsschlüssel
+   * @param locale Sprachspezifischer Ort
+   * @return eine Beschriftung oder ein Leerstring, falls es zu dem Schlüssel keine Beschriftung gibt.
+   */
+  public String getLabelWithColon(String key, Locale locale) {
+    String value = getValue(Bundle.LABELS, key, locale);
+    return StringUtils.isBlank(value) ? value : StringUtils.join(value, COLON);
   }
 
   /**
@@ -257,6 +285,15 @@ public class LanguageManager {
    */
   public Set<String> getErrorKeys(Locale locale) {
     return toSet(getResourceBundle(Bundle.ERRORS, locale));
+  }
+
+  /**
+   * Löscht alle im Cache vorhandenen Beschriftungen, Nachrichten und Fehlerbeschreibungen für alle Sprachen.
+   */
+  public void clear() {
+    this.labels = new HashMap<>();
+    this.messages = new HashMap<>();
+    this.errors = new HashMap<>();
   }
 
   private Set<String> toSet(ResourceBundle bundle) {
