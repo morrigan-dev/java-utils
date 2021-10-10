@@ -34,17 +34,15 @@ public class ConfigManager {
    }
 
    public Optional<String> getOptConfig(String configKey) {
-      return getConfigInternal(configKey);
+      return getOptConfigInternal(configKey);
    }
 
    public String getConfig(String configKey) {
-      Optional<String> optConfigValue = getConfigInternal(configKey);
-      if (optConfigValue.isPresent()) {
-         return optConfigValue.get();
-      } else {
-         throw new IllegalArgumentException(MessageFormatter.arrayFormat("Requested configuration with the key {} is not present in the configuration file {}",
-                  new Object[] { configKey, this.configFilename }).getMessage());
-      }
+      return getConfigInternal(configKey);
+   }
+
+   public String getConfig(String configKey, Object... parameters) {
+      return replacePlaceholder(getConfigInternal(configKey), parameters);
    }
 
    public void loadAllConfigsFromResources(String filename) throws IOException {
@@ -60,7 +58,21 @@ public class ConfigManager {
       this.configs.clear();
    }
 
-   private Optional<String> getConfigInternal(String configKey) {
+   private String replacePlaceholder(String value, Object... parameters) {
+      return MessageFormatter.arrayFormat(value, parameters).getMessage();
+   }
+
+   private String getConfigInternal(String configKey) {
+      Optional<String> optConfigValue = getOptConfigInternal(configKey);
+      if (optConfigValue.isPresent()) {
+         return optConfigValue.get();
+      } else {
+         throw new IllegalArgumentException(MessageFormatter.arrayFormat("Requested configuration with the key {} is not present in the configuration file {}",
+                  new Object[] { configKey, this.configFilename }).getMessage());
+      }
+   }
+
+   private Optional<String> getOptConfigInternal(String configKey) {
       String value = this.configs.getProperty(configKey);
       return value == null ? Optional.empty() : Optional.of(value);
    }

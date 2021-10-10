@@ -20,6 +20,8 @@ import de.morrigan.dev.utils.resources.ConfigManager;
 
 public class ConfigManagerTest {
 
+   private static final int ABSOLUTE_AMOUNT_OF_CONFIG_ITEMS = 2;
+
    private ConfigManager sut = ConfigManager.getInstance();
 
    @Before
@@ -35,7 +37,7 @@ public class ConfigManagerTest {
    @Test
    public void testLoadConfigs() throws IOException {
       this.sut.loadAllConfigsFromResources("config.properties");
-      assertThat(this.sut.getConfigKeys(), hasSize(1));
+      assertThat(this.sut.getConfigKeys(), hasSize(ABSOLUTE_AMOUNT_OF_CONFIG_ITEMS));
    }
 
    @Test
@@ -68,9 +70,16 @@ public class ConfigManagerTest {
    }
 
    @Test
+   public void testGetConfigWithArguments() throws IOException {
+      this.sut.loadAllConfigsFromResources("config.properties");
+      String config = this.sut.getConfig("command", "/tmp");
+      assertThat(config, is(equalTo("cd /tmp")));
+   }
+
+   @Test
    public void testClear() throws IOException {
       this.sut.loadAllConfigsFromResources("config.properties");
-      assertThat(this.sut.getConfigKeys(), hasSize(1));
+      assertThat(this.sut.getConfigKeys(), hasSize(ABSOLUTE_AMOUNT_OF_CONFIG_ITEMS));
       this.sut.clear();
       assertThat(this.sut.getConfigKeys(), hasSize(0));
    }
